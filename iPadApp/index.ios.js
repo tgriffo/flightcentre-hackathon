@@ -13,6 +13,13 @@ import { Container, Content, ActionSheet, Button, Text, Header, Left, Right, Bod
 import Camera from 'react-native-camera';
 
 export default class iPadApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      debugCamera: "debug camera text",
+    };
+  }
+
   render() {
     return (
       <Container>
@@ -23,7 +30,6 @@ export default class iPadApp extends Component {
         </Header>
         
         <Content padder>
-          <Text>Hello</Text>  
           <Camera
               ref={(cam) => {
                 this.camera = cam;
@@ -34,6 +40,9 @@ export default class iPadApp extends Component {
           <Button light block onPress={this._takePicture.bind(this)}>
             <Text>Take Picture</Text>
           </Button>
+          <Text>
+            {this.state.debugCamera}
+          </Text>
         </Content>
       </Container>
     );
@@ -41,8 +50,8 @@ export default class iPadApp extends Component {
 
   _takePicture () {
     this.camera.capture()
-      .then((data) => console.log(data))
-      .catch(err => console.error(err));
+      .then((data) => this.setState({ debugCamera: JSON.stringify(data) }))
+      .catch(err => this.setState({ debugCamera: JSON.stringify(err) }));
   }
 }
 
