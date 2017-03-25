@@ -7,7 +7,8 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  StyleSheet
+  StyleSheet,
+  Image
 } from 'react-native';
 import { Container, Content, ActionSheet, Button, Text, Header, Left, Right, Body, Title } from 'native-base';
 import Camera from 'react-native-camera';
@@ -37,22 +38,36 @@ export default class iPadApp extends Component {
               style={styles.container}
               type={Camera.constants.Type.front}>
           </Camera>
-          <Button light block onPress={this._takePicture.bind(this)}>
+          <Button light block onPress={this.takePicture.bind(this)}>
             <Text>Take Picture</Text>
           </Button>
           <Text>
             {this.state.debugCamera}
           </Text>
+          <Image 
+            style={{width: 500, height: 500}}
+            source={this.state.lastImage}></Image>
         </Content>
       </Container>
     );
   }
 
-  _takePicture () {
+  takePicture () {
     this.camera.capture()
-      .then((data) => this.setState({ debugCamera: JSON.stringify(data) }))
-      .catch(err => this.setState({ debugCamera: JSON.stringify(err) }));
+      .then((data) => {
+        const path = data.path;
+        this.setState({ 
+          debugCamera: path,
+          lastImage: { uri: path } 
+        });
+      })
+      .catch(err => this.setState({ debugCamera: 'capture error: ' + JSON.stringify(err) }));
   }
+
+  uploadPicture() {
+    
+  }
+
 }
 
 const styles = StyleSheet.create({
