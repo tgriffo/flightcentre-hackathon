@@ -15,6 +15,19 @@ import Camera from 'react-native-camera';
 
 import { RNS3 } from 'react-native-aws3';
 
+import * as firebase from 'firebase';
+
+var config = {
+    apiKey: "AIzaSyCofSPydjsp_jXp0iGZD60ENQ245_aYbAQ",
+    authDomain: "flightcentre-hackathon.firebaseapp.com",
+    databaseURL: "https://flightcentre-hackathon.firebaseio.com",
+    storageBucket: "flightcentre-hackathon.appspot.com",
+};
+firebase.initializeApp(config);
+
+// Get a reference to the database service
+let database = firebase.database();
+
 export default class iPadApp extends Component {
   constructor(props) {
     super(props);
@@ -113,8 +126,17 @@ export default class iPadApp extends Component {
     .then(response => {
       return response.text();
     })
-    .then(blob => {
-      this.setState({ debugCamera: blob });
+    .then(text => {
+      this.setState({ debugCamera: text });
+
+      database.ref('session/1').set({
+        emotion: JSON.parse(text),
+        category: 'category 1',
+        subcategory: 'subcategory 1',
+        country: 'AU',
+        city: 'Brisbane',
+        imageUrl: imageCloudPath
+      });
     });
   }
 
