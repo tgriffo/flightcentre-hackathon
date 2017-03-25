@@ -25,12 +25,14 @@ export default class iPadApp extends Component {
         <Content padder>
           <Text>Hello</Text>  
           <Camera
-              ref="cam"
+              ref={(cam) => {
+                this.camera = cam;
+              }}
               style={styles.container}
               type={Camera.constants.Type.front}>
           </Camera>
-          <Button light block onPress={this._takePicture}>
-            <Text>Light</Text>
+          <Button light block onPress={this._takePicture.bind(this)}>
+            <Text>Take Picture</Text>
           </Button>
         </Content>
       </Container>
@@ -38,9 +40,9 @@ export default class iPadApp extends Component {
   }
 
   _takePicture () {
-    this.refs.cam.capture(function(err, data) {
-      console.log(err, data);
-    });
+    this.camera.capture()
+      .then((data) => console.log(data))
+      .catch(err => console.error(err));
   }
 }
 
