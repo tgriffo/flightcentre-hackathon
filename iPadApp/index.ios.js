@@ -17,6 +17,8 @@ import { RNS3 } from 'react-native-aws3';
 
 import * as firebase from 'firebase';
 
+import uuidV1 from 'uuid/v1';
+
 var config = {
     apiKey: "AIzaSyCofSPydjsp_jXp0iGZD60ENQ245_aYbAQ",
     authDomain: "flightcentre-hackathon.firebaseapp.com",
@@ -82,12 +84,10 @@ export default class iPadApp extends Component {
   }
 
   uploadPicture(path) {
-    //const parsedUrl = URL.parse(path);
-    //const name = parsedUrl.query.substring(3,parsedUrl.query.length-8);
-    //const type = 'image/' + parsedUrl.query.substring(parsedUrl.query.length-3);
+    const id = uuidV1();
     const file = {
       uri: path,
-      name: 'HELLO.jpg',
+      name: id + '.jpg',
       type: 'image/JPG'
     };
     const options = {
@@ -105,12 +105,12 @@ export default class iPadApp extends Component {
           debugCamera: imageCloudPath,
           lastImage: { uri: imageCloudPath }
         });
-        this.verifyEmotion(imageCloudPath);
+        this.verifyEmotion(imageCloudPath, id);
       })
       .catch(err => this.setState({ debugCamera: 'upload error: ' + JSON.stringify(err) }));
   }
   
-  verifyEmotion(imageCloudPath) {
+  verifyEmotion(imageCloudPath, id) {
     const body = { url: imageCloudPath };
     const myHeaders = new Headers({
         'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ export default class iPadApp extends Component {
     .then(text => {
       this.setState({ debugCamera: text });
 
-      database.ref('session/1').set({
+      database.ref('session/' + id).set({
         emotion: JSON.parse(text),
         category: 'category 1',
         subcategory: 'subcategory 1',
@@ -139,7 +139,6 @@ export default class iPadApp extends Component {
       });
     });
   }
-
 }
 
 const styles = StyleSheet.create({
