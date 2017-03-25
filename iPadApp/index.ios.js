@@ -10,13 +10,10 @@ import {
   StyleSheet,
   Image
 } from 'react-native';
-import { Container, Content, ActionSheet, Button, Text, Header, Left, Right, Body, Title } from 'native-base';
+import { Container, Content, ActionSheet, Button, Text, Header, Left, Right, Body, Title, Grid, Row, Col } from 'native-base';
 import Camera from 'react-native-camera';
-
 import { RNS3 } from 'react-native-aws3';
-
 import * as firebase from 'firebase';
-
 import uuidV1 from 'uuid/v1';
 
 var config = {
@@ -35,6 +32,10 @@ export default class iPadApp extends Component {
     super(props);
     this.state = {
       debugCamera: "debug camera text",
+      pie: {
+        data: null,
+        options: null
+      }
     };
   }
 
@@ -46,25 +47,33 @@ export default class iPadApp extends Component {
             <Title>Flight Centre Hackathon</Title>
           </Body>
         </Header>
-        
-        <Content padder>
-          <Camera
-              ref={(cam) => {
-                this.camera = cam;
-              }}
-              style={styles.container}
-              type={Camera.constants.Type.front}>
-          </Camera>
-          <Button light block onPress={this.takePicture.bind(this)}>
-            <Text>Take Picture</Text>
-          </Button>
-          <Text>
-            {this.state.debugCamera}
-          </Text>
-          <Image 
-            style={{width: 500, height: 500}}
-            source={this.state.lastImage}>
-          </Image>
+
+        <Content>
+          <Grid>
+            <Row size={30} style={{ backgroundColor: '#EEEEEE'}}>
+              <Content padder>
+                <Camera
+                    ref={(cam) => {
+                      this.camera = cam;
+                    }}
+                    style={{height: 0}}
+                    type={Camera.constants.Type.front}>
+                </Camera>
+                <Button light block onPress={this.takePicture.bind(this)}>
+                  <Text>Take Picture</Text>
+                </Button>
+                <Text>
+                  {this.state.debugCamera}
+                </Text>
+              </Content>
+            </Row>
+            <Row size={70}>
+              <Image
+                style={{width: 500, height: 500}}
+                source={this.state.lastImage}>
+              </Image>
+            </Row>
+          </Grid>
         </Content>
       </Container>
     );
@@ -74,9 +83,9 @@ export default class iPadApp extends Component {
     this.camera.capture()
       .then((data) => {
         const path = data.path;
-        this.setState({ 
+        this.setState({
           debugCamera: path,
-          lastImage: { uri: path } 
+          lastImage: { uri: path }
         });
         this.uploadPicture(path);
       })
@@ -101,7 +110,7 @@ export default class iPadApp extends Component {
     RNS3.put(file, options)
       .then(response => {
         const imageCloudPath = response.body.postResponse.location;
-        this.setState({ 
+        this.setState({
           debugCamera: imageCloudPath,
           lastImage: { uri: imageCloudPath }
         });
@@ -109,7 +118,7 @@ export default class iPadApp extends Component {
       })
       .catch(err => this.setState({ debugCamera: 'upload error: ' + JSON.stringify(err) }));
   }
-  
+
   verifyEmotion(imageCloudPath, id) {
     const body = { url: imageCloudPath };
     const myHeaders = new Headers({
@@ -127,10 +136,15 @@ export default class iPadApp extends Component {
       return response.text();
     })
     .then(text => {
-      this.setState({ debugCamera: text });
+      const emotions = JSON.parse(text);
+      const transposedEmotions = this.transposeEmotions(emotions);
+      this.setState({
+        debugCamera: JSON.stringify(transposedEmotions),
+      });
 
       database.ref('session/' + id).set({
-        emotion: JSON.parse(text),
+        emotion: emotions,
+        transposedEmotions: transposedEmotions,
         category: 'category 1',
         subcategory: 'subcategory 1',
         country: 'AU',
@@ -138,6 +152,23 @@ export default class iPadApp extends Component {
         imageUrl: imageCloudPath
       });
     });
+  }
+
+  transposeEmotions(emotions) {
+    if (emotions['0'] && emotions['0'].scores) {
+      let arrayOfEmotions = [];
+
+      for (var emotionName in emotions['0'].scores) {
+        arrayOfEmotions.push({
+          emotion: emotionName,
+          value: emotions['0'].scores[emotionName]
+        });
+      }
+
+      return arrayOfEmotions;
+    }
+
+    return [];
   }
 }
 

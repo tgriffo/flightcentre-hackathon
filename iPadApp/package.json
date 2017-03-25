@@ -13,6 +13,7 @@
     "react-native": "0.42.3",
     "react-native-aws3": "0.0.4",
     "react-native-camera": "^0.6.0",
+    "react-native-pathjs-charts": "0.0.26",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
