@@ -16,15 +16,9 @@ import { RNS3 } from 'react-native-aws3';
 import * as firebase from 'firebase';
 import uuidV1 from 'uuid/v1';
 
-var config = {
-    apiKey: "AIzaSyCofSPydjsp_jXp0iGZD60ENQ245_aYbAQ",
-    authDomain: "flightcentre-hackathon.firebaseapp.com",
-    databaseURL: "https://flightcentre-hackathon.firebaseio.com",
-    storageBucket: "flightcentre-hackathon.appspot.com",
-};
-firebase.initializeApp(config);
+import config from './config';
 
-// Get a reference to the database service
+firebase.initializeApp(config.firebase);
 let database = firebase.database();
 
 export default class iPadApp extends Component {
@@ -99,15 +93,8 @@ export default class iPadApp extends Component {
       name: id + '.jpg',
       type: 'image/JPG'
     };
-    const options = {
-      //keyPrefix: './',
-      bucket: 'flightcentre-hackathon-os-piratas',
-      region: 'ap-southeast-2',
-      accessKey: 'AKIAJQ3M4OYQX6UJ227A',
-      secretKey: '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',
-      successActionStatus: 201
-    };
-    RNS3.put(file, options)
+
+    RNS3.put(file, config.s3)
       .then(response => {
         const imageCloudPath = response.body.postResponse.location;
         this.setState({
@@ -123,7 +110,7 @@ export default class iPadApp extends Component {
     const body = { url: imageCloudPath };
     const myHeaders = new Headers({
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': 'f07f680a18e94bd4a68a2f72884522bf'
+        'Ocp-Apim-Subscription-Key': config.emotionApi.key
     });
     const options = {
       method: 'POST',
