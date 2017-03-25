@@ -46,7 +46,8 @@ export default class iPadApp extends Component {
           </Text>
           <Image 
             style={{width: 500, height: 500}}
-            source={this.state.lastImage}></Image>
+            source={this.state.lastImage}>
+          </Image>
         </Content>
       </Container>
     );
@@ -65,7 +66,7 @@ export default class iPadApp extends Component {
   }
 
   uploadPicture() {
-    
+         
   }
 
 }

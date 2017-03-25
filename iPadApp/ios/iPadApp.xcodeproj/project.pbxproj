@@ -41,7 +41,7 @@
 		2D02E4C91E0B4AEC006451C7 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* iPadAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* iPadAppTests.m */; };
 		40CB2AACE31041DAB750D79E /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45CD1C25780C4C1080E7453C /* Rubik-Medium.ttf */; };
-		4ACE0E701E85FCCB00AA34B4 /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACE0E591E85FBD800AA34B4 /* libRCTCameraRoll.a */; };
+		4ACE0E711E86075D00AA34B4 /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACE0E591E85FBD800AA34B4 /* libRCTCameraRoll.a */; };
 		4D52174A28CD489FA7C302D5 /* Courier New.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EACF470128014CE69B7ED67B /* Courier New.ttf */; };
 		57286388C72345B9AB6D6C68 /* Rubik-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2E53E4F61DB947E687F7F302 /* Rubik-MediumItalic.ttf */; };
 		5C54CEA114D5461C96671323 /* Microsoft Sans Serif.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 239F38350D094064AED6C6BF /* Microsoft Sans Serif.ttf */; };
@@ -357,7 +357,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4ACE0E701E85FCCB00AA34B4 /* libRCTCameraRoll.a in Frameworks */,
+				4ACE0E711E86075D00AA34B4 /* libRCTCameraRoll.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
