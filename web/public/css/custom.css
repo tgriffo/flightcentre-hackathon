@@ -1,4 +1,86 @@
-.destination-col {
-	padding-left: 10px;
-	padding-right: 10px;
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+body {
+	font-family: 'Roboto', sans-serif;
+}
+/*
+Primary
+
+darkPurple: 	#311b92;
+dreamBlue;		#475dfb
+hotPink: 			#ff0d49;
+
+lightBlue: 		#006aff;
+fcRed: 				#cc0c00;
+
+shade1 				#cfd8dc
+shade2				#b0b3c5
+shade3 				#90a4a3
+shade4 				#263238
+*/
+
+hr {
+	border-color: #b0b3c5;
+	margin-bottom: 10px;
+}
+
+#header-page {
+	color: #311b92;
+	font-weight: 200;
+	margin-bottom: 40px;
+}
+
+.rec-product {
+	/*border: 1px solid red;*/
+	padding-left: 0;
+}
+
+.rec-label {
+	color: #90a4a3;
+	font-weight: lighter;
+	margin-bottom: 15px;
+}
+
+.destination-name	{
+	margin-bottom: 10px;
+	color: #475dfb;
+}
+
+.destination-level3 {
+	font-size: 1.1em;
+	margin-bottom: 40px;
+}
+
+.product-id {
+	color: #b0b3c5;
+	margin-bottom: 40px;
+}
+
+.package-label {
+	color: #90a4a3
+}
+
+.category-sec {
+	margin-bottom: 40px;;
+}
+
+.category-name {
+	font-size: 1.2em;
+}
+
+.subcategory-sec {
+	margin-bottom: 20px;
+}
+.subcategory-name {
+	font-size: 1.2em;
+}
+
+.seo-tags {
+	display: inline-block;
+	padding: 10px 15px;
+	background-color: #cfd8dc;
+	color: #475dfb;
+	border-radius: 3em;
+	margin-right: 8px;
+	margin-top: 8px;
 }
