@@ -14,6 +14,8 @@ import {
 import { Container, Content, ActionSheet, Button, Text, Header, Left, Right,
          Body, Title, Grid, Row, Col, DeckSwiper, Card, CardItem, Thumbnail, Icon } from 'native-base';
 import Camera from 'react-native-camera';
+import SwipeCards from 'react-native-swipe-cards';
+
 import { RNS3 } from 'react-native-aws3';
 import * as firebase from 'firebase';
 import uuidV1 from 'uuid/v1';
@@ -44,11 +46,17 @@ class HolidayImageRotator extends Component {
           style={{height: 0}}
           type={Camera.constants.Type.front}>
         </Camera>
-        <DeckSwiper
-          onSwipeRight={this.swipeRight.bind(this)}
-          onSwipeLeft={this.swipeLeft.bind(this)}
-          dataSource={this.state.images}
-          renderItem={this.renderItem}
+        <SwipeCards
+          cards={this.state.images}
+
+          renderCard={this.renderItem}
+          renderNoMoreCards={() => <Text>No more cards</Text>}
+
+          handleYup={this.yup.bind(this)}
+          handleNope={this.nope.bind(this)}
+
+          loop
+          smoothTransition
         />
       </Container>
     );
@@ -56,44 +64,32 @@ class HolidayImageRotator extends Component {
 
   renderItem(item) {
     return (
-      <Card style={{ elevation: 3 }}>
-        <CardItem cardBody>
-          <Image style={styles.holidayImage} source={item.img_src} />
-        </CardItem>
-        <CardItem>
-          <Left>
-            <Icon name="ios-arrow-dropleft-circle-outline" style={{ color: '#FF0D49' }} />
-          </Left>
-          <Right>
-            <Icon name="ios-arrow-dropright-circle-outline" style={{ color: '#1DE9B6' }} />
-          </Right>
-        </CardItem>
-      </Card>
-    );
+      <Image style={styles.holidayImage} source={item.img_src} />
+     );
   }
 
-  swipeRight() {
-    this.swipe(true);
+  yup(item) {
+    this.swipe(true, item);
   }
 
-  swipeLeft() {
-    this.swipe(false);
+  nope(item) {
+    this.swipe(false, item);
   }
 
-  swipe(like) {
-    setTimeout(this.takePicture.bind(this), 500);
+  swipe(like, item) {
+    setTimeout(this.takePicture.bind(this, like, item), 500);
   }
 
-  takePicture () {
+  takePicture(like, item) {
     this.camera.capture()
       .then((data) => {
         const path = data.path;
-        this.uploadPicture(path);
+        this.uploadPicture(path, like, item);
       })
       .catch(err => this.setState({ debugCamera: 'capture error: ' + JSON.stringify(err) }));
   }
 
-  uploadPicture(path) {
+  uploadPicture(path, like, item) {
     const id = uuidV1();
     const file = {
       uri: path,
@@ -108,12 +104,12 @@ class HolidayImageRotator extends Component {
           debugCamera: imageCloudPath,
           lastImage: { uri: imageCloudPath }
         });
-        this.verifyEmotion(imageCloudPath, id);
+        this.verifyEmotion(imageCloudPath, like, item);
       })
       .catch(err => this.setState({ debugCamera: 'upload error: ' + JSON.stringify(err) }));
   }
 
-  verifyEmotion(imageCloudPath, id) {
+  verifyEmotion(imageCloudPath, like, item) {
     const body = { url: imageCloudPath };
     const myHeaders = new Headers({
         'Content-Type': 'application/json',
@@ -132,18 +128,15 @@ class HolidayImageRotator extends Component {
     .then(text => {
       const emotions = JSON.parse(text);
       const transposedEmotions = this.transposeEmotions(emotions);
-      this.setState({
-        debugCamera: JSON.stringify(transposedEmotions),
-      });
 
-      database.ref('session/' + id).set({
+      let timestamp = new Date().getTime();
+      database.ref('session/' + timestamp).set({
+        title: item.title,
+        keywords: item.keywords,
         emotion: emotions,
         transposedEmotions: transposedEmotions,
-        category: 'category 1',
-        subcategory: 'subcategory 1',
-        country: 'AU',
-        city: 'Brisbane',
-        imageUrl: imageCloudPath
+        imageUrl: imageCloudPath,
+        liked: like
       });
     });
   }
