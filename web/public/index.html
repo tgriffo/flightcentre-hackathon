@@ -26,14 +26,11 @@
         <h1 id="header-page">Travel Dream Analyzer</h1>
       </div>
 
-
-      <div class="col-xs-9" id="product-rec-section">
-
-
-
+      <!-- Container for recommended products -->
+      <div class="col-xs-12" id="product-rec-sec">
         <h4 class="rec-label">Top Recommendations</h4>
 
-
+        <!-- Recommended Product-->
         <div class="col-xs-4 rec-product">
           <hr>
           <h3 class="destination-name">
@@ -56,31 +53,23 @@
             <p class="subcategory-name">Sub Category Value</p>
           </div>
 
-
           <div class="seo-sec">
             <span class="seo-tags">SEO value</span>
             <span class="seo-tags">SEO value</span>
             <span class="seo-tags">SEO value</span>
             <span class="seo-tags">SEO value</span>
           </div>
+        </div> <!-- ./end of Product Recommendation 1 -->
+
+      </div> <!-- ./end of Product Recommendation Section -->
 
 
-
-
-
-
-
-
-
-
-        </div>
-
-
-      </div>
-
-
-      <div class="col-xs-3" id="helix-persona-sec">
-        <canvas id="myChart1" width="400" height="400"></canvas>
+      <!-- Helix Persona -->
+      <div class="col-xs-12" id="emotion-sec">
+        <hr>
+        <h4 class="emotion-title">Emotion</h4>
+        <p class="emotion-description">Emotion profile taken during photo selection</p>
+        <canvas id="myChart1" width="600" height="300"></canvas>
       </div>
 
 
@@ -194,16 +183,6 @@
 
 
     }
-
-
-
-
-
-
-
-
-
-
 
 
     function updateChart(labelList, valueList, chatNum) {
