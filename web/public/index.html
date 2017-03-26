@@ -31,41 +31,9 @@
 
     <div class="container">
 
+      <h2 class="rec-label">Top Recommendations</h2>
       <!-- Container for recommended products -->
       <div class="col-xs-12" id="product-rec-sec">
-        <h4 class="rec-label">Top Recommendations</h4>
-
-        <!-- Recommended Product-->
-        <div class="col-xs-4 rec-product">
-          <hr>
-          <h3 class="destination-name">
-            Destination name
-          </h3>
-          <p class="destination-level3">
-            Destination level 3
-          </p>
-
-          <h4 class="package-name">Package Name</h4>
-          <p class="product-id">Product ID</p>
-
-          <div class="category-sec">
-            <p class="package-label">Category</p>
-            <p class="category-name">Category Value</p>
-          </div>
-
-          <div class="subcategory-sec">
-            <p class="package-label">Sub Category</p>
-            <p class="subcategory-name">Sub Category Value</p>
-          </div>
-
-          <div class="seo-sec">
-            <span class="seo-tags">SEO value</span>
-            <span class="seo-tags">SEO value</span>
-            <span class="seo-tags">SEO value</span>
-            <span class="seo-tags">SEO value</span>
-          </div>
-        </div> <!-- ./end of Product Recommendation 1 -->
-
       </div> <!-- ./end of Product Recommendation Section -->
 
 
@@ -101,28 +69,53 @@
 
     firebase.initializeApp(config);
 
+    var template = function (dest, visits) {
+      var part1 = "<!-- Recommended Product--> \
+        <div class='col-xs-4 rec-product'> \
+          <hr> \
+          <h3 class='destination-name'> ";
+      var part2 = "</h3> \
+          <p class='destination-level3'>";
+      var part3 = " Total Visits</p></div>"
+
+      return  part1 + dest + part2 + visits + part3;
+    }
+
     var chatNum = 1;
     var starCountRef = firebase.database().ref('session');
     starCountRef.on('value', function(snapshot) {
 
+        $( "#product-rec-sec" ).html("");
         var dataSet = snapshot.val();
         console.log(dataSet);
         var emotions = [];
         var values = [];
         var chartUpdated = false;
 
+        var timestamps = [];
         for (var key in dataSet) {
-          var eachData = dataSet[key];
+          timestamps.push(key);
+        }
+        timestamps = timestamps.sort();
 
-          if ('transposedEmotions' in eachData) {
-            var emotionList = eachData.transposedEmotions;
-            for (var key in emotionList) {
-              var emotion = emotionList[key];
-              emotions.push(emotion.emotion);
-              values.push(emotion.value);
-            }
-          }
-        };
+        var lastTimestamp = timestamps.slice(Math.max(timestamps.length - 1, 1));
+        var emotionList = dataSet[lastTimestamp].transposedEmotions;
+        for (var key in emotionList) {
+          // console.log(key);
+          var emotion = emotionList[key];
+          emotions.push(emotion.emotion);
+          values.push(emotion.value);
+        }
+
+        // for (var key in dataSet) {
+        //   var emotionList = dataSet[key].transposedEmotions;
+        //   for (var key in emotionList) {
+        //     // console.log(key);
+        //     var emotion = emotionList[key];
+        //     emotions.push(emotion.emotion);
+        //     values.push(emotion.value);
+        //   }
+        // }
 
         var scaleUpValues = values.map(function (value) {
           var scaleup = value * 1000;
@@ -136,7 +129,37 @@
         updateChart(emotions, scaleUpValues, chatNum);
 
 
-        setupLineChart();
+        // setupLineChart();
+
+        $.ajax({ 
+           type: "GET",
+           dataType: "'application/json'",
+           url: "https://limitless-caverns-44997.herokuapp.com/beach",
+           success: function(xhr, status){     
+              console.log("++++++++++++++++++++++");
+              xhr.responseText
+              var obj = jQuery.parseJSON( xhr.responseText);
+              console.log(obj);
+              console.log("++++++++++++++++++++++");
+           },
+           error: function (xhr, status) {
+              console.log("--------------------");
+              xhr.responseText
+              var obj = jQuery.parseJSON( xhr.responseText);
+              
+              var result = obj.data.data; 
+              result.forEach(function(element) {
+                var dest = element[0];
+                var visit = element[1];
+                $( "#product-rec-sec" ).append(template(dest, visit));
+              });
+              console.log(obj);
+              console.log("--------------------");
+           }
+        });
+
+
+
     });
 
     function setupLineChart() {
