@@ -198,12 +198,12 @@
           datasets: [
               {
                   label: "My First dataset",
-                  backgroundColor: "rgba(179,181,198,0.2)",
-                  borderColor: "rgba(179,181,198,1)",
-                  pointBackgroundColor: "rgba(179,181,198,1)",
-                  pointBorderColor: "#fff",
-                  pointHoverBackgroundColor: "#fff",
-                  pointHoverBorderColor: "rgba(179,181,198,1)",
+                  backgroundColor: "rgba(71,93,251,0.6)",
+                  borderColor: "#475dfb",
+                  borderWidth: 2,
+                  pointBackgroundColor: "#475dfb",
+                  pointHoverBackgroundColor: "#ff0d49",
+                  pointHoverBorderColor: "#ff0d49",
                   data: valueList
               }
           ]
@@ -213,12 +213,12 @@
           type: "radar",
           data: data,
           options: {
-                  scale: {
-                      reverse: false,
-                      ticks: {
-                          beginAtZero: true
-                      }
+              scale: {
+                  reverse: false,
+                  ticks: {
+                      beginAtZero: true
                   }
+              }
           }
       });
     }
