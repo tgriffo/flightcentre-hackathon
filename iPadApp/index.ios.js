@@ -8,79 +8,86 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Image
+  Image,
+  View
 } from 'react-native';
-import { Container, Content, ActionSheet, Button, Text, Header, Left, Right, Body, Title, Grid, Row, Col } from 'native-base';
+import { Container, Content, ActionSheet, Button, Text, Header, Left, Right,
+         Body, Title, Grid, Row, Col, DeckSwiper, Card, CardItem, Thumbnail, Icon } from 'native-base';
 import Camera from 'react-native-camera';
 import { RNS3 } from 'react-native-aws3';
 import * as firebase from 'firebase';
 import uuidV1 from 'uuid/v1';
 
 import config from './config';
+import images from './images';
 
 firebase.initializeApp(config.firebase);
 let database = firebase.database();
 
-export default class iPadApp extends Component {
+class HolidayImageRotator extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      debugCamera: '',
-      pie: {
-        data: null,
-        options: null
-      }
+      images: images.images,
+      currentImageIndex: 0
     };
   }
 
   render() {
     return (
       <Container>
-        <Header>
-          <Body>
-            <Title>Flight Centre Hackathon</Title>
-          </Body>
-        </Header>
-
-        <Content>
-          <Grid>
-            <Row size={30} style={{ backgroundColor: '#EEEEEE'}}>
-              <Content padder>
-                <Camera
-                    ref={(cam) => {
-                      this.camera = cam;
-                    }}
-                    style={{height: 0}}
-                    type={Camera.constants.Type.front}>
-                </Camera>
-                <Button light block onPress={this.takePicture.bind(this)}>
-                  <Text>Take Picture</Text>
-                </Button>
-                <Text>
-                  {this.state.debugCamera}
-                </Text>
-              </Content>
-            </Row>
-            <Row size={70}>
-              <Image
-                style={{width: 500, height: 500}}
-                source={this.state.lastImage}>
-              </Image>
-            </Row>
-          </Grid>
-        </Content>
+        <Camera
+          ref={(cam) => {
+            this.camera = cam;
+          }}
+          style={{height: 0}}
+          type={Camera.constants.Type.front}>
+        </Camera>
+        <DeckSwiper
+          onSwipeRight={this.swipeRight.bind(this)}
+          onSwipeLeft={this.swipeLeft.bind(this)}
+          dataSource={this.state.images}
+          renderItem={this.renderItem}
+        />
       </Container>
     );
+  }
+
+  renderItem(item) {
+    return (
+      <Card style={{ elevation: 3 }}>
+        <CardItem cardBody>
+          <Image style={styles.holidayImage} source={item.img_src} />
+        </CardItem>
+        <CardItem>
+          <Left>
+            <Icon name="ios-arrow-dropleft-circle-outline" style={{ color: '#FF0D49' }} />
+          </Left>
+          <Right>
+            <Icon name="ios-arrow-dropright-circle-outline" style={{ color: '#1DE9B6' }} />
+          </Right>
+        </CardItem>
+      </Card>
+    );
+  }
+
+  swipeRight() {
+    this.swipe(true);
+  }
+
+  swipeLeft() {
+    this.swipe(false);
+  }
+
+  swipe(like) {
+    setTimeout(this.takePicture.bind(this), 500);
   }
 
   takePicture () {
     this.camera.capture()
       .then((data) => {
         const path = data.path;
-        this.setState({
-          debugCamera: path,
-          lastImage: { uri: path }
-        });
         this.uploadPicture(path);
       })
       .catch(err => this.setState({ debugCamera: 'capture error: ' + JSON.stringify(err) }));
@@ -159,7 +166,46 @@ export default class iPadApp extends Component {
   }
 }
 
+
+export default class iPadApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      debugCamera: ''
+    };
+  }
+
+  render() {
+    return (
+      <Container>
+        <Header>
+          <Body>
+            <Title>Flight Centre Hackathon</Title>
+            <Text>
+              {this.state.debugCamera}
+            </Text>
+          </Body>
+        </Header>
+
+        <Container>
+          <HolidayImageRotator />
+        </Container>
+      </Container>
+    );
+  }
+}
+
 const styles = StyleSheet.create({
+  holidayImage: {
+    resizeMode: 'cover',
+    flex: 1,
+    width: 500,
+    height: 500
+  },
+  emotionPhoto: {
+    width: 50,
+    height: 50
+  },
 });
 
 AppRegistry.registerComponent('iPadApp', () => iPadApp);
