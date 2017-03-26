@@ -5,71 +5,78 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Hack it</title>
+    <title>Travel Dream Analyzer</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/custom.css" rel="stylesheet" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+
   </head>
   <body>
-    <div class="container"">
-      <div class="col-xs-9">
-        <div class="col-xs-4 destination-col">
-          <div class="col-xs-12">
-            <img class="img-responsive" src="img/el nido.jpg" alt="city">
+
+    <div id="header-sec">
+      <div class="container">
+        <h1 id="header-page">Travel Dream Analyzer</h1>
+      </div>
+    </div>
+
+
+    <div class="container">
+
+      <!-- Container for recommended products -->
+      <div class="col-xs-12" id="product-rec-sec">
+        <h4 class="rec-label">Top Recommendations</h4>
+
+        <!-- Recommended Product-->
+        <div class="col-xs-4 rec-product">
+          <hr>
+          <h3 class="destination-name">
+            Destination name
+          </h3>
+          <p class="destination-level3">
+            Destination level 3
+          </p>
+
+          <h4 class="package-name">Package Name</h4>
+          <p class="product-id">Product ID</p>
+
+          <div class="category-sec">
+            <p class="package-label">Category</p>
+            <p class="category-name">Category Value</p>
           </div>
-          <div class="col-xs-12">
-            <h4>El Nido</h4>
-            <p>Philippines</p>
+
+          <div class="subcategory-sec">
+            <p class="package-label">Sub Category</p>
+            <p class="subcategory-name">Sub Category Value</p>
           </div>
 
-          <div class="col-xs-12">
-            <h4>El Nido</h4>
-            <p>Philippines</p>
+          <div class="seo-sec">
+            <span class="seo-tags">SEO value</span>
+            <span class="seo-tags">SEO value</span>
+            <span class="seo-tags">SEO value</span>
+            <span class="seo-tags">SEO value</span>
           </div>
-          
-          <div class="col-xs-12">
-            <canvas id="lineChart1" width="400" height="400"></canvas>
-          </div>
+        </div> <!-- ./end of Product Recommendation 1 -->
+
+      </div> <!-- ./end of Product Recommendation Section -->
 
 
-        </div>
-
-        <div class="col-xs-4"> 
-            <div class="item">
-              <img class="img-responsive" src="img/el nido.jpg" alt="city">
-              <div class="carousel-caption">
-                <h3>El Nido</h3>
-                <p>Philippines</p>
-              </div>
-            </div>       
-        </div>
-
-        <div class="col-xs-4"> 
-            <div class="item">
-              <img class="img-responsive" src="img/el nido.jpg" alt="city">
-              <div class="carousel-caption">
-                <h3>El Nido</h3>
-                <p>Philippines</p>
-              </div>
-            </div> 
-        </div>
+      <!-- Helix Persona -->
+      <div class="col-xs-12" id="emotion-sec">
+        <hr>
+        <h4 class="emotion-title">Emotion</h4>
+        <p class="emotion-description">Emotion profile taken during photo selection</p>
+        <canvas id="myChart1" width="600" height="300"></canvas>
       </div>
 
-      <div class="col-xs-3">
-        <div class="col-xs-12 row">
-          <h3>Hello</h3>
-        <canvas id="myChart1" width="400" height="400"></canvas>
-
-        </div>
-      </div>
-          
 
     </div>
   </body>
@@ -97,11 +104,11 @@
     var chatNum = 1;
     var starCountRef = firebase.database().ref('session');
     starCountRef.on('value', function(snapshot) {
-        
+
         var dataSet = snapshot.val();
         console.log(dataSet);
         var emotions = [];
-        var values = [];  
+        var values = [];
         var chartUpdated = false;
 
         for (var key in dataSet) {
@@ -183,16 +190,6 @@
     }
 
 
-
-
-
-
-
-
-
-
-
-
     function updateChart(labelList, valueList, chatNum) {
       var ctx = document.getElementById("myChart" + chatNum);
 
@@ -201,12 +198,12 @@
           datasets: [
               {
                   label: "My First dataset",
-                  backgroundColor: "rgba(179,181,198,0.2)",
-                  borderColor: "rgba(179,181,198,1)",
-                  pointBackgroundColor: "rgba(179,181,198,1)",
-                  pointBorderColor: "#fff",
-                  pointHoverBackgroundColor: "#fff",
-                  pointHoverBorderColor: "rgba(179,181,198,1)",
+                  backgroundColor: "rgba(71,93,251,0.6)",
+                  borderColor: "#475dfb",
+                  borderWidth: 2,
+                  pointBackgroundColor: "#475dfb",
+                  pointHoverBackgroundColor: "#ff0d49",
+                  pointHoverBorderColor: "#ff0d49",
                   data: valueList
               }
           ]
@@ -216,12 +213,12 @@
           type: "radar",
           data: data,
           options: {
-                  scale: {
-                      reverse: false,
-                      ticks: {
-                          beginAtZero: true
-                      }
+              scale: {
+                  reverse: false,
+                  ticks: {
+                      beginAtZero: true
                   }
+              }
           }
       });
     }
