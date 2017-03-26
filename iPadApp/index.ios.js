@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   holidayImage: {
     resizeMode: 'cover',
     flex: 1,
-    width: 500,
+    width: 800,
     height: 500
   },
   emotionPhoto: {
