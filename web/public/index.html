@@ -99,7 +99,12 @@
         timestamps = timestamps.sort();
 
         var lastTimestamp = timestamps.slice(Math.max(timestamps.length - 1, 1));
+        var title = dataSet[lastTimestamp].title;
+        console.log("title");
+        console.log(title);
         var emotionList = dataSet[lastTimestamp].transposedEmotions;
+        console.log("lastTimestamp");
+        console.log(lastTimestamp);
         for (var key in emotionList) {
           // console.log(key);
           var emotion = emotionList[key];
@@ -134,7 +139,7 @@
         $.ajax({ 
            type: "GET",
            dataType: "'application/json'",
-           url: "https://limitless-caverns-44997.herokuapp.com/beach",
+           url: "https://limitless-caverns-44997.herokuapp.com/" + title,
            success: function(xhr, status){     
               console.log("++++++++++++++++++++++");
               xhr.responseText
