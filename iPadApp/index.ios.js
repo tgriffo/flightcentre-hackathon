@@ -25,7 +25,7 @@ export default class iPadApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      debugCamera: "debug camera text",
+      debugCamera: '',
       pie: {
         data: null,
         options: null
@@ -160,32 +160,6 @@ export default class iPadApp extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  button: {
-    padding: 10,
-    color: "#FF0000",
-    borderWidth: 1,
-    borderColor: "#FFFFFF",
-		margin: 5
-	},
-	buttonText: {
-	  color: "#000000"
-	},
 });
 
 AppRegistry.registerComponent('iPadApp', () => iPadApp);
