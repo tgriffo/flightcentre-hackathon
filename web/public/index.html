@@ -97,14 +97,21 @@
           timestamps.push(key);
         }
         timestamps = timestamps.sort();
+        console.log(timestamps);
+        console.log("==============00000000000");
 
         var lastTimestamp = timestamps.slice(Math.max(timestamps.length - 1, 1));
+        // console.log(lastTimestamp);
+        // console.log(dataSet[lastTimestamp]);
+        console.log("----------------------------");
+        console.log(dataSet[lastTimestamp]);
+        console.log(dataSet[lastTimestamp].transposedEmotions);
         var title = dataSet[lastTimestamp].title;
-        console.log("title");
-        console.log(title);
+        // console.log("title");
+        // console.log(title);
         var emotionList = dataSet[lastTimestamp].transposedEmotions;
-        console.log("lastTimestamp");
-        console.log(lastTimestamp);
+        // console.log("lastTimestamp");
+        // console.log(lastTimestamp);
         for (var key in emotionList) {
           // console.log(key);
           var emotion = emotionList[key];
@@ -141,14 +148,14 @@
            dataType: "'application/json'",
            url: "https://limitless-caverns-44997.herokuapp.com/" + title,
            success: function(xhr, status){     
-              console.log("++++++++++++++++++++++");
+              // console.log("++++++++++++++++++++++");
               xhr.responseText
               var obj = jQuery.parseJSON( xhr.responseText);
-              console.log(obj);
-              console.log("++++++++++++++++++++++");
+              // console.log(obj);
+              // console.log("++++++++++++++++++++++");
            },
            error: function (xhr, status) {
-              console.log("--------------------");
+              // console.log("--------------------");
               xhr.responseText
               var obj = jQuery.parseJSON( xhr.responseText);
               
@@ -158,8 +165,8 @@
                 var visit = element[1];
                 $( "#product-rec-sec" ).append(template(dest, visit));
               });
-              console.log(obj);
-              console.log("--------------------");
+              // console.log(obj);
+              // console.log("--------------------");
            }
         });
 
@@ -168,7 +175,7 @@
     });
 
     function setupLineChart() {
-      console.log("0------");
+      // console.log("0------");
       var ctx = document.getElementById("lineChart1");
       var data = {
         datasets: [{
